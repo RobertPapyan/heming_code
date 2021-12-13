@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>heming</title>
+    </head>
+    <body>
+        <input type="text" id="textArea">
+        <input type="button" value="Code" id="code">
+        <input type="button" value="DeCode" id="decode">
+
+        <script>
+            let textArea = document.querySelector('#textArea');
+            let codeButton = document.querySelector('#code');
+            let deCodeButton = document.querySelector('#decode');
+            codeButton.addEventListener('click',()=>{code();});
+            deCodeButton.addEventListener('click',()=>{deCode();});
+            function code(){
+                let message = textArea.value;
+                message = message.split('');
+                let arr = [];
+                let k = 1;
+                while(message.length !=0){
+                    if(!isPow(k,2)){
+                        arr[k] = message[0];
+                        message.shift();                       
+                    }else{
+                        arr[k] = 'x';
+                    }
+                    k++;
+                }
+                console.log(arr);
+                for(let i = 1;i <=arr.length-1;i++){
+                    if(arr[i] == 'x'){
+                        
+                        let newArr = [];
+                        let skip = 0;
+                     
+                        for(let j = i;j<=arr.length-1;j++){
+                           skip++;
+                           if(skip-1 < i){
+                              if(j!=i) {newArr.push(arr[j])};
+                           }if(skip-1 == i*2-1){
+                               skip = 0;
+                           }  
+                        }
+
+                        let oneCount = 0;
+                        for(let j = 0;j<=newArr.length-1;j++){
+                            if(newArr[j] == 1){
+                                oneCount++;
+                            }
+                        }
+                        if(oneCount %2 == 0){
+                            arr[i] = 0;
+                        }else{
+                            arr[i] = 1;
+                        }
+
+
+                    }
+                }
+                console.log(arr);
+                textArea.value = arr.join('');
+            }
+            function deCode(){
+                let message = textArea.value;
+                message = message.split('');
+                let arr = ['x',...message];
+                let indexesOfWrong = [];
+                for(let i =1;i<=arr.length-1;i++){
+                    if(isPow(i,2)){
+
+                        let newArr = [];
+                        let skip = 0;
+                     
+                        for(let j = i;j<=arr.length-1;j++){
+                           skip++;
+                           if(skip-1 < i){
+                              if(j!=i) {newArr.push(arr[j])};
+                           }if(skip-1 == i*2-1){
+                               skip = 0;
+                           }  
+                        }
+
+
+                        let oneCount  = 0;
+                        for(let j = 0; j<=newArr.length-1;j++){
+                            if(newArr[j] == 1){
+                                oneCount++;
+                            }
+                        }
+                        
+                        if(oneCount % 2 == 0 && arr[i] ==0){
+
+                        }else if(oneCount % 2 == 1 && arr[i] ==1){
+
+                        }else{ indexesOfWrong.push(i);}
+
+                    }
+                }
+                console.log(indexesOfWrong);
+                if(indexesOfWrong.length == 0){
+                    let deCodeAnswer = [];
+                    for(let i = 1; i<=arr.length-1;i++){
+                        if(!isPow(i,2)){
+                            deCodeAnswer.push(arr[i]);
+                        }
+                    }
+                    console.log(deCodeAnswer);
+                    textArea.value = 'No Error - ' + deCodeAnswer.join('');
+                }else {
+                    let index =0;
+                    for(let i = 0; i<=indexesOfWrong.length-1;i++){
+                        index+=indexesOfWrong[i];
+                    }
+                    console.log(arr);
+                    
+                    if(arr[index] == 1){
+                        arr[index] = 0
+                    }else if(arr[index] == 0){ 
+                        arr[index] = 1;
+                    }
+                    console.log(arr);
+                    let deCodeAnswer = [];
+                    for(let i = 1; i<=arr.length-1;i++){
+                        if(!isPow(i,2)){
+                            deCodeAnswer.push(arr[i]);
+                        }
+                    }
+
+                    console.log(deCodeAnswer);
+                    textArea.value = 'Error on index - '+index +', '+ deCodeAnswer.join('');
+                }
+            
+            }
+
+            function isPow(num1,num2){
+                let ispow = true;
+                while(num1>1){
+                    if(num1%num2 == 0){
+                        num1/=num2;
+                    }else{
+                        ispow = false;
+                        break;
+                    }
+                }
+                return (ispow);
+            }
+       </script>
+    </body>
+</html>
